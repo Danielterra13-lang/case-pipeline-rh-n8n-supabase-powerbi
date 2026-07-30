@@ -7,7 +7,8 @@
 
 Uma planilha de RH em Excel com cadastro de colaboradores, sem padronização. Na prática: cabeçalhos repetidos a cada período de contratação, blocos de dados separados por linhas em branco, e registros reais misturados com linhas de seção. Ao todo, 90 colaboradores cadastrados espalhados em 107 linhas, o que já é um sinal de quanto ruído estrutural existe numa planilha "só de olhar".
 
-📌 *Imagem: images/01-planilha-original.png*
+📌 <img width="980" height="372" alt="image" src="https://github.com/user-attachments/assets/fd589f7f-9bae-4e77-b351-22999838ab15" />
+
 
 Esse tipo de planilha funciona pra consulta pontual, mas trava qualquer análise: não dá pra montar um gráfico de evolução de headcount, cruzar desligamento com escolaridade, ou responder "quantas mulheres temos no time de desenvolvimento" sem antes gastar um bom tempo limpando tudo manualmente, toda vez que alguém precisar de novo.
 
