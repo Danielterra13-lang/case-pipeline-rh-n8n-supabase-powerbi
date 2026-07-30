@@ -7,7 +7,8 @@
 
 Uma planilha de RH em Excel com cadastro de colaboradores, sem padronização. Na prática: cabeçalhos repetidos a cada período de contratação, blocos de dados separados por linhas em branco, e registros reais misturados com linhas de seção. Ao todo, 90 colaboradores cadastrados espalhados em 107 linhas, o que já é um sinal de quanto ruído estrutural existe numa planilha "só de olhar".
 
-📌 *Imagem: images/01-planilha-original.png*
+![Planilha original de RH, desorganizada, com cabeçalhos repetidos por período de contratação](01-planilha-original.png)
+*A planilha original: 90 registros reais espalhados em 107 linhas, cabeçalhos repetidos a cada período de contratação.*
 
 Esse tipo de planilha funciona pra consulta pontual, mas trava qualquer análise: não dá pra montar um gráfico de evolução de headcount, cruzar desligamento com escolaridade, ou responder "quantas mulheres temos no time de desenvolvimento" sem antes gastar um bom tempo limpando tudo manualmente, toda vez que alguém precisar de novo.
 
@@ -25,7 +26,8 @@ Separar assim, em vez de fazer tudo dentro do Power BI (que também tem Power Qu
 
 O N8N roda self-hosted, via Docker Desktop (`n8nio/n8n:latest`, porta 5678), em vez de usar o N8N Cloud. Isso dá controle total sobre execução e credenciais, sem limite de execuções, mas também significa que a responsabilidade por uptime, backup dos workflows e atualização do container é sua, não de um provedor.
 
-📌 *Imagem: images/07-docker-desktop-n8n.png*
+![Docker Desktop mostrando o container n8nio/n8n rodando localmente na porta 5678](07-docker-desktop-n8n.png)
+*N8N self-hosted via Docker Desktop, container N8N_local rodando na porta 5678.*
 
 O workflow em si segue esse fluxo:
 
@@ -41,7 +43,8 @@ Google Drive Trigger (fileUpdated)
                     └─> loop
 ```
 
-📌 *Imagem: images/02-pipeline-n8n.png* (ou images/06-workflow-n8n-completo.png para a versão sem corte)
+![Workflow completo no N8N: Google Drive Trigger, download, extração, loop, escrita no Supabase e log de erro](06-workflow-n8n-completo.png)
+*Workflow completo no N8N: do gatilho no Google Drive até a escrita no Supabase, com desvio de erro para log.*
 
 Dois pontos de design que valem destaque:
 
@@ -64,13 +67,15 @@ O fluxo de erro fez o trabalho que deveria fazer (não travou nada, e deixou ras
 
 No Postgres, o dado chega na tabela `colaboradores` e é organizado em tabelas dimensão: `dim_cargo`, `dim_escolaridade`, `dim_genero`, `dim_setor`, `dim_tipo_desligamento`.
 
-📌 *Imagem: images/03-supabase.png*
+![Editor de tabelas do Supabase mostrando a tabela colaboradores e as tabelas dimensão, com RLS disabled](03-supabase.png)
+*Tabela `colaboradores` e as tabelas dimensão no Supabase. Repare no aviso "RLS disabled" no topo.*
 
 Ponto de atenção que vale registrar no case: as tabelas aparecem marcadas como **Unrestricted**, e o editor mostra o aviso **RLS disabled** (Row Level Security desligado). Pra um projeto de portfólio, sem problema, mas é o mesmo tipo de decisão que precisa mudar antes de qualquer uso em produção: com RLS desligado, se a chave pública (anon key) do Supabase for exposta em algum lugar, qualquer um com essa chave lê a tabela direto pela API REST automática do Supabase. A correção é simples: habilitar RLS e liberar acesso só via service role, que é o que o N8N já usa internamente pra escrever.
 
 ## Camada de visualização (Power BI)
 
-📌 *Imagem: images/04-dashboard-powerbi.png*
+![Dashboard de RH no Power BI com KPIs, série temporal e distribuições por setor, estado, gênero e escolaridade](04-dashboard-powerbi.png)
+*Dashboard de RH: KPIs comparativos, série temporal de colaboradores ativos e distribuições por setor, estado, gênero e escolaridade.*
 
 O dashboard cobre o essencial de um painel de RH:
 
@@ -81,7 +86,8 @@ O dashboard cobre o essencial de um painel de RH:
 
 ## Chatbot no Power BI
 
-📌 *Imagem: images/05-chatbot-powerbi.png*
+![Chatbot embutido no dashboard respondendo em linguagem natural quantas demissões ocorreram em 2019](05-chatbot-powerbi.png)
+*O mesmo assistente de IA do case de vendas, aqui plugado ao modelo de RH.*
 
 O mesmo tipo de assistente de IA usado no case de vendas aparece aqui também, plugado ao modelo de RH. No exemplo capturado no próprio dashboard, uma pergunta em linguagem natural sobre desligamentos em 2019 recebe de volta o número exato já calculado pelo modelo, sem o gestor precisar abrir filtro nenhum.
 
